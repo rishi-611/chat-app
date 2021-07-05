@@ -1,0 +1,103 @@
+const express = require("express");
+const http = require("http");
+const socketio = require("socket.io");
+const Filter = require("bad-words");
+const { generateMessage } = require("./utils/message");
+const {
+  createUser,
+  removeUser,
+  getUser,
+  getUsersInRoom,
+} = require("./utils/users");
+
+const port = process.env.PORT;
+
+const app = express();
+
+// we wrapped the app with server so that we can use socket io and customize the server,
+// this does not change any behaviour because this is done anyways behind the scene by express
+const server = http.createServer(app);
+// this is how we configure socketio. io needs a raw http server to be wrapped around socket.io fnctn,
+// this gives us access to client side socket too, by adding a script.
+const io = socketio(server);
+
+app.use(express.static("public"));
+
+app.get("/", (req, res) => {
+  res.render("index.html");
+});
+
+// connection is an inbuilt event, triggers on a new connection
+// connection has a handle that receives socket arg,
+// socket is an object which contains info about this new connection
+io.on("connection", (socket) => {
+  // socke.emit emits the event to this particular connection
+  // message is a custom event. custom events must also my emitted manually
+  console.log("new client connected");
+
+  socket.on("join", ({ username, room }, callback) => {
+    // createUser returns either a user on success to error on failure
+    const { error, user } = createUser(socket.id, username, room);
+    if (error) {
+      return callback(error);
+    }
+    socket.join(user.room);
+    callback();
+
+    socket.emit(
+      "message",
+      generateMessage("Admin", `Welcome ${user.username}`)
+    );
+    socket.broadcast
+      .to(user.room)
+      .emit(
+        "message",
+        generateMessage("Admin", `${user.username} joined the chat`)
+      );
+  });
+
+  socket.on("sendMessage", (msg, acknowledge) => {
+    // io.emit emits message to all connections
+    const { user } = getUser(socket.id);
+    if (!user) {
+      return acknowledge("something went wrong");
+    }
+    const filter = new Filter();
+    msg = filter.clean(msg);
+    io.in(user.room).emit("message", generateMessage(user.username, msg));
+    acknowledge();
+  });
+
+  socket.on("sendLocation", (coords, acknowledge) => {
+    const { user } = getUser(socket.id);
+    if (!user) {
+      return console.log("some error occured");
+    }
+    // io.in emits to everyone in the room, including the current user
+    io.in(user.room).emit(
+      "location",
+      generateMessage(
+        user.username,
+        `https://google.com/maps?q=${coords.lat},${coords.lng}`
+      )
+    );
+    // this function is defined in client js, so when it is called, console log takes place in browser
+    acknowledge();
+  });
+
+  // disconnect is inbuilt event, gets triggered when user disconnects
+  socket.on("disconnect", () => {
+    const { user } = getUser(socket.id);
+    if (user) {
+      socket
+        .to(user.room)
+        .emit(
+          "message",
+          generateMessage("Admin", `${user.username} left the room`)
+        );
+    }
+    removeUser(socket.id);
+  });
+});
+
+server.listen(port, () => console.log(`listening to port ${port}`));
