@@ -44,6 +44,11 @@ io.on("connection", (socket) => {
     socket.join(user.room);
     callback();
 
+    // when a user connects, fetch all users in room and push current user
+    // then pass the room and room's users to all members of room
+    const userList = getUsersInRoom(user.room);
+    io.in(user.room).emit("room-data", { userList, room: user.room });
+
     socket.emit(
       "message",
       generateMessage("Admin", `Welcome ${user.username}`)
@@ -88,15 +93,23 @@ io.on("connection", (socket) => {
   // disconnect is inbuilt event, gets triggered when user disconnects
   socket.on("disconnect", () => {
     const { user } = getUser(socket.id);
-    if (user) {
-      socket
-        .to(user.room)
-        .emit(
-          "message",
-          generateMessage("Admin", `${user.username} left the room`)
-        );
+
+    if (!user) {
+      // if user disconnects while on the homepage, he wont be in any room
+      return;
     }
+
+    socket
+      .to(user.room)
+      .emit(
+        "message",
+        generateMessage("Admin", `${user.username} left the room`)
+      );
     removeUser(socket.id);
+
+    // update room data for all room members
+    const userList = getUsersInRoom(user.room);
+    socket.to(user.room).emit("room-data", { userList, room: user.room });
   });
 });
 

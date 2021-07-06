@@ -9,12 +9,40 @@ const locationBtn = document.querySelector("#location-btn");
 const msgcontainer = document.querySelector("#messages-container");
 const message = document.querySelector("#message").innerHTML;
 const locationMsg = document.querySelector("#location").innerHTML;
+const roomDataTemplate = document.querySelector(
+  "#room-data-template"
+).innerHTML;
+const sidebar = document.querySelector("#sidebar");
 
 // join room
 // Qs comes from query string library cdn, to parse query string added to the url by form action
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
+
+// autoscroll (will only scroll to bottom if when new msg is sent, the user is already at bottom)
+const autoscroll = () => {
+  // NEW MESSAGE HEIGHT
+  const newMessage = msgcontainer.lastElementChild;
+  const newMessageStyle = getComputedStyle(newMessage);
+  // offset height includes height+padding+border
+  // we are adding margins to get total height
+  const newMessageHeight =
+    newMessage.offsetHeight + parseInt(newMessageStyle.marginBottom);
+
+  // VISIBLE HEIGHT OF MESSAGE CONTAINER
+  const visibleHeight = msgcontainer.offsetHeight;
+
+  // HEIGHT OF messages containere, including overflow
+  const containerHeight = msgcontainer.scrollHeight;
+
+  const scrollHeight = msgcontainer.scrollTop + visibleHeight;
+
+  if (containerHeight - newMessageHeight <= scrollHeight) {
+    // scroll so that that total scrollable height is covered
+    msgcontainer.scrollTop = msgcontainer.scrollHeight;
+  }
+};
 
 // by default every user is in a room which is his id,
 // custom rooms can be created which multiple users can join
@@ -28,6 +56,15 @@ socket.emit("join", { username, room }, (error) => {
   }
 });
 // socket
+
+socket.on("room-data", ({ userList, room }) => {
+  const roomDataHTML = Mustache.render(roomDataTemplate, {
+    userList,
+    room,
+  });
+  sidebar.innerHTML = roomDataHTML;
+});
+
 socket.on("message", ({ username, message: msg, createdAt }) => {
   const messageHTML = Mustache.render(message, {
     username,
@@ -35,6 +72,7 @@ socket.on("message", ({ username, message: msg, createdAt }) => {
     createdAt: dayjs(createdAt).format("hh:ss:mm A"),
   });
   msgcontainer.insertAdjacentHTML("beforeend", messageHTML);
+  autoscroll();
 });
 
 socket.on("location", ({ message: locationLink, createdAt }) => {
@@ -44,6 +82,7 @@ socket.on("location", ({ message: locationLink, createdAt }) => {
     createdAt: dayjs(createdAt).format("hh:ss:mm A"),
   });
   msgcontainer.insertAdjacentHTML("beforeend", locationHTML);
+  autoscroll();
 });
 
 const handleMsgFormSubmit = (e) => {

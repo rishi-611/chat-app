@@ -139,13 +139,17 @@ button:disabled {
   color: #4c2a96;
 }
 
+.msgcontainer {
+  scroll-behavior: smooth;
+}
+
 /* Message Composition Styles */
 
 .compose {
   display: flex;
   flex-shrink: 0;
-  margin-top: 16px;
-  padding: 24px;
+  margin-top: 5px;
+  padding: 15px;
 }
 
 .compose form {

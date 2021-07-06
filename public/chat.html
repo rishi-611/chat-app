@@ -36,7 +36,7 @@
   </head>
   <body>
     <div class="chat">
-      <div class="chat__sidebar"></div>
+      <div class="chat__sidebar" id="sidebar"></div>
       <div class="chat__main">
         <div id="messages-container" class="chat__messages"></div>
         <div class="compose">
@@ -59,7 +59,7 @@
 
     <!-- templates -->
     <script id="message" type="text/html">
-      <div>
+      <div class="message">
         <p>
           <span class="message__name">{{username}}</span
           ><span class="message__meta">{{createdAt}}</span>
@@ -78,6 +78,15 @@
           <a href="{{locationLink}}" target="_blank">My location</a>
         </p>
       </div>
+    </script>
+    <script id="room-data-template" type="text/html">
+      <h1 class="room-title">{{room}}</h1>
+      <h3 class="list-title">Users</h3>
+      <ul>
+        {{#userList}}
+        <li class="users">{{username}}</li>
+        {{/userList}}
+      </ul>
     </script>
   </body>
 </html>

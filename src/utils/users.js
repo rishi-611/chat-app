@@ -24,6 +24,10 @@ const createUser = (id, username, room) => {
   );
   if (userAlreadyExists) return { error: "username already exists." };
 
+  // check for max character length in username
+  if (username.length > 16)
+    return { error: "username can not be longer than 10 characters" };
+
   const user = new User(id, username, room);
   users.push(user);
   return { user };
