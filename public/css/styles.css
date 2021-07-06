@@ -136,6 +136,7 @@ button:disabled {
 
 .message {
   margin-bottom: 16px;
+  font-size: 1.1rem;
 }
 
 .own-message,
@@ -147,14 +148,15 @@ button:disabled {
   text-align: center;
   border-radius: 0.5rem;
   background-color: #e3d9f8;
-  background: linear-gradient(to right, #d2befa, #ebe2ff);
+  background: linear-gradient(to right, #d0b9ff, #ebe2ff);
+  box-shadow: 0 0 10px rgba(76, 42, 150, 0.4);
   color: #2b0f68;
   padding: 1rem auto;
 }
 
 .message__name {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
   margin-right: 8px;
 }
 
@@ -235,9 +237,13 @@ button:disabled {
   .compose form {
     margin-right: 0;
   }
+
+  .compose input {
+    margin: 0;
+  }
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 500px) {
   .chat {
     display: block;
   }

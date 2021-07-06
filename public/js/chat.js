@@ -102,7 +102,7 @@ socket.on("admin-message", ({ username, message: msg, createdAt }) => {
   autoscroll();
 });
 
-socket.on("location", ({ message: locationLink, createdAt }) => {
+socket.on("location", ({ username, message: locationLink, createdAt }) => {
   const locationHTML = Mustache.render(locationMsg, {
     username,
     locationLink,
@@ -150,7 +150,6 @@ const handleLocationBtn = () => {
     socket.emit("sendLocation", { lat: latitude, lng: longitude }, (err) => {
       locationBtn.disabled = false;
       if (err) return socket.emit("sendError", "Failed to send your location");
-      console.log("location sent");
     });
   };
 
