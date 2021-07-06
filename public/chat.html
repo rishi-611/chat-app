@@ -10,6 +10,13 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     /> -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="icon" href="./images/favicon.png" />
     <link rel="stylesheet" href="./css/styles.css" />
     <script
@@ -50,9 +57,18 @@
               autocomplete="off"
               placeholder="type a message"
             />
-            <button type="submit" id="msg-btn">Send</button>
+            <button type="submit" id="msg-btn" title="send" role="send-button">
+              <i class="fas fa-paper-plane fa-2x"></i>
+            </button>
           </form>
-          <button type="button" id="location-btn">Send location</button>
+          <button
+            type="button"
+            id="location-btn"
+            title="send location"
+            role="send-location-button"
+          >
+            <i class="fas fa-map-marker-alt fa-2x"></i>
+          </button>
         </div>
       </div>
     </div>

@@ -127,7 +127,7 @@ const handleMsgFormSubmit = (e) => {
 
   msgBtn.disabled = true;
   socket.emit("sendMessage", e.target.elements.message.value, (err) => {
-    if (err) console.log(err);
+    if (err) socket.emit("sendError", err.error);
 
     msgBtn.disabled = false;
     msgInput.value = "";
@@ -137,7 +137,10 @@ const handleMsgFormSubmit = (e) => {
 
 const handleLocationBtn = () => {
   if (!navigator.geolocation) {
-    return console.log("Your browser does not support this feature");
+    return socket.emit(
+      "sendError",
+      "Your browser does not support this feature"
+    );
   }
   locationBtn.disabled = true;
 
@@ -146,13 +149,16 @@ const handleLocationBtn = () => {
     // providing a callback fnc which can be called when the event handling is done. this is called event acknowledegment
     socket.emit("sendLocation", { lat: latitude, lng: longitude }, (err) => {
       locationBtn.disabled = false;
-      if (err) return console.log("failed to send your location");
+      if (err) return socket.emit("sendError", "Failed to send your location");
       console.log("location sent");
     });
   };
 
   const error = (err) => {
-    console.log(err.message);
+    socket.emit(
+      "sendError",
+      "You must allow access to your location to use this feature"
+    );
     locationBtn.disabled = false;
   };
 

@@ -61,11 +61,19 @@ io.on("connection", (socket) => {
       );
   });
 
+  socket.on("sendError", (error) => {
+    socket.emit("admin-message", generateMessage("Admin", error));
+  });
+
   socket.on("sendMessage", (msg, acknowledge) => {
     // io.emit emits message to all connections
     const { user } = getUser(socket.id);
     if (!user) {
-      return acknowledge("something went wrong");
+      socket.emit(
+        "admin-message",
+        generateMessage("Failed to send the message")
+      );
+      return acknowledge();
     }
     const filter = new Filter();
     msg = filter.clean(msg);
@@ -79,7 +87,8 @@ io.on("connection", (socket) => {
   socket.on("sendLocation", (coords, acknowledge) => {
     const { user } = getUser(socket.id);
     if (!user) {
-      return console.log("some error occured");
+      socket.emit("admin-message", generateMessage("some error occured"));
+      return;
     }
     // io.in emits to everyone in the room, including the current user
     socket.emit(
