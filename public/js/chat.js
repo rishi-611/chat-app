@@ -8,6 +8,8 @@ const msgBtn = document.querySelector("#msg-btn");
 const locationBtn = document.querySelector("#location-btn");
 const msgcontainer = document.querySelector("#messages-container");
 const message = document.querySelector("#message").innerHTML;
+const ownMessage = document.querySelector("#own-message").innerHTML;
+const adminMessage = document.querySelector("#admin-message").innerHTML;
 const locationMsg = document.querySelector("#location").innerHTML;
 const roomDataTemplate = document.querySelector(
   "#room-data-template"
@@ -67,6 +69,26 @@ socket.on("room-data", ({ userList, room }) => {
 
 socket.on("message", ({ username, message: msg, createdAt }) => {
   const messageHTML = Mustache.render(message, {
+    username,
+    msg,
+    createdAt: dayjs(createdAt).format("hh:ss:mm A"),
+  });
+  msgcontainer.insertAdjacentHTML("beforeend", messageHTML);
+  autoscroll();
+});
+
+socket.on("own-message", ({ username, message: msg, createdAt }) => {
+  const messageHTML = Mustache.render(ownMessage, {
+    username,
+    msg,
+    createdAt: dayjs(createdAt).format("hh:ss:mm A"),
+  });
+  msgcontainer.insertAdjacentHTML("beforeend", messageHTML);
+  autoscroll();
+});
+
+socket.on("admin-message", ({ username, message: msg, createdAt }) => {
+  const messageHTML = Mustache.render(adminMessage, {
     username,
     msg,
     createdAt: dayjs(createdAt).format("hh:ss:mm A"),

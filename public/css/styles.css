@@ -118,6 +118,16 @@ button:disabled {
   margin-bottom: 16px;
 }
 
+.own-message {
+  text-align: right;
+}
+
+.admin-message {
+  text-align: center;
+  border-radius: 0.5rem;
+  background-color: #e3d9f8;
+}
+
 .message__name {
   font-weight: 600;
   font-size: 14px;
@@ -137,10 +147,6 @@ button:disabled {
 
 .message a:hover {
   color: #4c2a96;
-}
-
-.msgcontainer {
-  scroll-behavior: smooth;
 }
 
 /* Message Composition Styles */

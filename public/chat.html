@@ -68,6 +68,25 @@
       </div>
     </script>
 
+    <script id="own-message" type="text/html">
+      <div class="message own-message">
+        <p>
+          <span class="message__name">{{username}}</span
+          ><span class="message__meta">{{createdAt}}</span>
+        </p>
+        <p class="message">{{msg}}</p>
+      </div>
+    </script>
+
+    <script id="admin-message" type="text/html">
+      <div class="message admin-message">
+        <p>
+          <span class="message__meta">{{createdAt}}</span>
+        </p>
+        <p class="message">{{msg}}</p>
+      </div>
+    </script>
+
     <script id="location" type="text/html">
       <div>
         <p>

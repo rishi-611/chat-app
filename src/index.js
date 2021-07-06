@@ -50,13 +50,13 @@ io.on("connection", (socket) => {
     io.in(user.room).emit("room-data", { userList, room: user.room });
 
     socket.emit(
-      "message",
+      "admin-message",
       generateMessage("Admin", `Welcome ${user.username}`)
     );
     socket.broadcast
       .to(user.room)
       .emit(
-        "message",
+        "admin-message",
         generateMessage("Admin", `${user.username} joined the chat`)
       );
   });
@@ -69,7 +69,10 @@ io.on("connection", (socket) => {
     }
     const filter = new Filter();
     msg = filter.clean(msg);
-    io.in(user.room).emit("message", generateMessage(user.username, msg));
+
+    socket.emit("own-message", generateMessage("You", msg));
+
+    socket.to(user.room).emit("message", generateMessage(user.username, msg));
     acknowledge();
   });
 
