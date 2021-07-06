@@ -1,4 +1,7 @@
+const Filter = require("bad-words");
+
 const users = [];
+const filter = new Filter();
 
 class User {
   constructor(id, username, room) {
@@ -30,6 +33,14 @@ const createUser = (id, username, room) => {
 
   if (room.length > 7) {
     return { error: "room name can not be longer than 7 characters" };
+  }
+
+  // check for profanity
+  if (filter.isProfane(username) || filter.isProfane(room)) {
+    return {
+      error:
+        "your username or room name seems to be inappropriate. Please check for profanity",
+    };
   }
 
   const user = new User(id, username, room);
