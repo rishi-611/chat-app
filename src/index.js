@@ -82,13 +82,23 @@ io.on("connection", (socket) => {
       return console.log("some error occured");
     }
     // io.in emits to everyone in the room, including the current user
-    io.in(user.room).emit(
-      "location",
+    socket.emit(
+      "own-location",
       generateMessage(
         user.username,
         `https://google.com/maps?q=${coords.lat},${coords.lng}`
       )
     );
+
+    socket
+      .to(user.room)
+      .emit(
+        "location",
+        generateMessage(
+          user.username,
+          `https://google.com/maps?q=${coords.lat},${coords.lng}`
+        )
+      );
     // this function is defined in client js, so when it is called, console log takes place in browser
     acknowledge();
   });

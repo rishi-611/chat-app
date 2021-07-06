@@ -119,7 +119,8 @@ button:disabled {
   margin-bottom: 16px;
 }
 
-.own-message {
+.own-message,
+.own-location {
   text-align: right;
 }
 

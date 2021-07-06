@@ -88,7 +88,7 @@
     </script>
 
     <script id="location" type="text/html">
-      <div>
+      <div class="message">
         <p>
           <span class="message__name">{{username}}</span
           ><span class="message__meta">{{createdAt}}</span>
@@ -98,6 +98,19 @@
         </p>
       </div>
     </script>
+
+    <script id="own-location" type="text/html">
+      <div class="message own-location">
+        <p>
+          <span class="message__name">{{username}}</span
+          ><span class="message__meta">{{createdAt}}</span>
+        </p>
+        <p class="message">
+          <a href="{{locationLink}}" target="_blank">My location</a>
+        </p>
+      </div>
+    </script>
+
     <script id="room-data-template" type="text/html">
       <h1 class="room-title">{{room}}</h1>
       <h3 class="list-title">Users</h3>

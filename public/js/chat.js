@@ -11,6 +11,7 @@ const message = document.querySelector("#message").innerHTML;
 const ownMessage = document.querySelector("#own-message").innerHTML;
 const adminMessage = document.querySelector("#admin-message").innerHTML;
 const locationMsg = document.querySelector("#location").innerHTML;
+const ownLocationMsg = document.querySelector("#own-location").innerHTML;
 const roomDataTemplate = document.querySelector(
   "#room-data-template"
 ).innerHTML;
@@ -103,6 +104,16 @@ socket.on("admin-message", ({ username, message: msg, createdAt }) => {
 
 socket.on("location", ({ message: locationLink, createdAt }) => {
   const locationHTML = Mustache.render(locationMsg, {
+    username,
+    locationLink,
+    createdAt: dayjs(createdAt).format("hh:ss:mm A"),
+  });
+  msgcontainer.insertAdjacentHTML("beforeend", locationHTML);
+  autoscroll();
+});
+
+socket.on("own-location", ({ message: locationLink, createdAt }) => {
+  const locationHTML = Mustache.render(ownLocationMsg, {
     username,
     locationLink,
     createdAt: dayjs(createdAt).format("hh:ss:mm A"),
