@@ -60,6 +60,10 @@ socket.emit("join", { username, room }, (error) => {
 // socket
 
 socket.on("room-data", ({ userList, room }) => {
+  const userIndex = userList.findIndex((user) => user.id === socket.id);
+  if (userIndex !== -1) {
+    userList[userIndex].username = userList[userIndex].username + " (you)";
+  }
   const roomDataHTML = Mustache.render(roomDataTemplate, {
     userList,
     room,

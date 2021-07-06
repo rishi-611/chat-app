@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "env-cmd -f environment/dev.env nodemon src/index.js -e js,html "
+    "dev": "env-cmd -f environment/dev.env nodemon src/index.js -e js,html,css "
   },
   "author": "rishi dubey",
   "license": "ISC",

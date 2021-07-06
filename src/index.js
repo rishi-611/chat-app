@@ -105,8 +105,8 @@ io.on("connection", (socket) => {
     socket
       .to(user.room)
       .emit(
-        "message",
-        generateMessage("Admin", `${user.username} left the room`)
+        "admin-message",
+        generateMessage("Admin", `${user.username} left the chat`)
       );
     removeUser(socket.id);
 

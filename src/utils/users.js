@@ -28,6 +28,10 @@ const createUser = (id, username, room) => {
   if (username.length > 16)
     return { error: "username can not be longer than 10 characters" };
 
+  if (room.length > 7) {
+    return { error: "room name can not be longer than 7 characters" };
+  }
+
   const user = new User(id, username, room);
   users.push(user);
   return { user };

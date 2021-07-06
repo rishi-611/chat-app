@@ -41,6 +41,7 @@ button {
   cursor: pointer;
   padding: 12px;
   background: #7c5cbf;
+  border-radius: 4px;
   border: none;
   color: white;
   font-size: 16px;
@@ -126,6 +127,9 @@ button:disabled {
   text-align: center;
   border-radius: 0.5rem;
   background-color: #e3d9f8;
+  background: linear-gradient(to right, #d2befa, #ebe2ff);
+  color: #2b0f68;
+  padding: 1rem auto;
 }
 
 .message__name {
@@ -180,9 +184,11 @@ button:disabled {
 
 .room-title {
   font-weight: 400;
-  font-size: 22px;
   background: #2c2f3a;
-  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
 }
 
 .list-title {
@@ -196,4 +202,53 @@ button:disabled {
   list-style-type: none;
   font-weight: 300;
   padding: 12px 24px 0 24px;
+}
+
+/* media */
+
+@media only screen and (max-width: 400px) {
+  .chat {
+    display: block;
+  }
+
+  .chat__sidebar {
+    height: 3.5rem;
+    color: white;
+    background: #333744;
+    width: 100%;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Chat styles */
+
+  .chat__main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 3.5rem);
+    max-height: 100vh;
+    align-items: stretch;
+  }
+
+  .chat__messages {
+    flex-grow: 1;
+    padding: 24px 24px 0 24px;
+    overflow-y: scroll;
+  }
+
+  .chat ul,
+  .list-title {
+    display: none;
+  }
+
+  .room-title {
+    font-weight: 700;
+    font-size: 22px;
+    background: #333744;
+    padding: 0;
+    margin-bottom: 0;
+  }
 }
